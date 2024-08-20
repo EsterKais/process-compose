@@ -45,11 +45,9 @@ func (api *PcApi) GetProcess(c *gin.Context) {
 // @Success 200 {object} object "Projects"
 // @Router /projects [get]
 func (api *PcApi) GetProjectConfig(c *gin.Context) {
-	// project := api.project.GetProjectConfig();
-
-	fmt.Printf("GetProjectConfig Requested!")
-
-	c.JSON(http.StatusOK, "Commented out")
+	fmt.Printf("src/api/pc_api.go")
+	project := api.project.GetProjectConfig();
+	c.JSON(http.StatusOK, project)
 }
 
 // @Schemes
