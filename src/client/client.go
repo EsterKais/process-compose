@@ -98,7 +98,7 @@ func (p *PcClient) GetProcessInfo(name string) (*types.ProcessConfig, error) {
 }
 
 func (p *PcClient) GetProjectConfig() string {
-	fmt.Printf("GetProjects IN client \n")
+	fmt.Printf("src/client/client.go \n")
 
 	return p.getProjectConfig()
 }

@@ -17,8 +17,9 @@ var refreshCmd = &cobra.Command{
 		// fmt.Printf("NEW RUNNER: %+v\n", runner)
 
 		// I still need to somehow get the running project:
-		projects := getClient().GetProjectConfig();
-		fmt.Printf("REFRESH RESULT: %+v\n", projects)
+		// projects := getClient().GetProjectConfig();
+		fmt.Printf("REFRESH RESULT: %+v\n", getClient().GetProjectConfig())
+		// fmt.Printf("REFRESH RESULT: %+v\n", projects)
 	},
 }
 

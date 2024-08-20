@@ -29,5 +29,5 @@ type IProject interface {
 	ScaleProcess(name string, scale int) error
 	GetProcessPorts(name string) (*types.ProcessPorts, error)
 	SetProcessPassword(name string, password string) error
-	GetProjectConfig() string
+	// GetProjectConfig() string
 }

@@ -52,7 +52,7 @@ func InitRoutes(useLogger bool, handler *PcApi) *gin.Engine {
 	r.POST("/process/restart/:name", handler.RestartProcess)
 	r.POST("/project/stop", handler.ShutDownProject)
 	r.GET("/project/state", handler.GetProjectState)
-	r.GET("/projects", handler.GetProjects)
+	// r.GET("/project/config", handler.GetProjectConfig)
 	r.PATCH("/process/scale/:name/:scale", handler.ScaleProcess)
 
 	//websocket

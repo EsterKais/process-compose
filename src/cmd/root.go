@@ -3,6 +3,14 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"path"
+	"runtime"
+	"strconv"
+	"time"
+
 	"github.com/f1bonacc1/process-compose/src/admitter"
 	"github.com/f1bonacc1/process-compose/src/api"
 	"github.com/f1bonacc1/process-compose/src/app"
@@ -12,13 +20,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"io"
-	"net/http"
-	"os"
-	"path"
-	"runtime"
-	"strconv"
-	"time"
 )
 
 var (

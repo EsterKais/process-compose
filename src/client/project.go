@@ -49,6 +49,6 @@ func (p *PcClient) getProjectState(withMemory bool) (*types.ProjectState, error)
 }
 
 func (p *PcClient) getProjectConfig() string {
-	fmt.Printf("getProjectConfig IN project \n")
-	return "I AM PROJECT CONFIGURATION"
+	fmt.Printf("src/client/project.go \n")
+	return "{config: project}"
 }
