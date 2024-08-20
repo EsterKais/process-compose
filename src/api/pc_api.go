@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -34,6 +35,21 @@ func (api *PcApi) GetProcess(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, state)
+}
+
+// @Schemes
+// @Description Retrieves the current project and its information
+// @Tags Project
+// @Summary Get project info
+// @Produce  json
+// @Success 200 {object} object "Projects"
+// @Router /projects [get]
+func (api *PcApi) GetProjects(c *gin.Context) {
+	project := api.project.GetProjectConfig();
+
+	fmt.Printf("API PROJECT: %+v\n", project)
+
+	c.JSON(http.StatusOK, project)
 }
 
 // @Schemes

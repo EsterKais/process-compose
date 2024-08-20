@@ -3,15 +3,16 @@ package app
 import (
 	"context"
 	"fmt"
-	"github.com/f1bonacc1/process-compose/src/config"
-	"github.com/f1bonacc1/process-compose/src/pclog"
-	"github.com/f1bonacc1/process-compose/src/types"
 	"os"
 	"os/user"
 	"runtime"
 	"slices"
 	"sync"
 	"time"
+
+	"github.com/f1bonacc1/process-compose/src/config"
+	"github.com/f1bonacc1/process-compose/src/pclog"
+	"github.com/f1bonacc1/process-compose/src/types"
 
 	"github.com/rs/zerolog/log"
 )
@@ -92,6 +93,7 @@ func (p *ProjectRunner) Run() error {
 	return err
 }
 
+// Does it re-read the config? No!
 func (p *ProjectRunner) runProcess(config *types.ProcessConfig) {
 	procLogger := p.logger
 	if isStringDefined(config.LogLocation) {
@@ -272,6 +274,7 @@ func (p *ProjectRunner) StartProcess(name string) error {
 		log.Error().Msgf("Process %s is already running", name)
 		return fmt.Errorf("process %s is already running", name)
 	}
+	fmt.Printf("Client: %+v\n", p.project.Processes)
 	if processConfig, ok := p.project.Processes[name]; ok {
 		p.runProcess(&processConfig)
 	} else {
@@ -343,6 +346,7 @@ func (p *ProjectRunner) RestartProcess(name string) error {
 func (p *ProjectRunner) GetProcessInfo(name string) (*types.ProcessConfig, error) {
 	p.runProcMutex.Lock()
 	defer p.runProcMutex.Unlock()
+	fmt.Printf("Client: %+v\n", p.project.Processes)
 	if processConfig, ok := p.project.Processes[name]; ok {
 		return &processConfig, nil
 	} else {
@@ -781,6 +785,11 @@ func (p *ProjectRunner) GetProjectState(checkMem bool) (*types.ProjectState, err
 		p.projectState.MemoryState = getMemoryUsage()
 	}
 	return p.projectState, nil
+}
+
+func (p *ProjectRunner) GetProjectConfig() string {
+	fmt.Printf("GetProjectConfig IN project_runner \n")
+	return "GetProjectConfig IN project_runner"
 }
 
 func getMemoryUsage() *types.MemoryState {

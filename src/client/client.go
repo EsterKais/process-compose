@@ -3,12 +3,13 @@ package client
 import (
 	"context"
 	"fmt"
-	"github.com/f1bonacc1/process-compose/src/pclog"
-	"github.com/f1bonacc1/process-compose/src/types"
 	"net"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/f1bonacc1/process-compose/src/pclog"
+	"github.com/f1bonacc1/process-compose/src/types"
 )
 
 var (
@@ -94,6 +95,12 @@ func (p *PcClient) GetLexicographicProcessNames() ([]string, error) {
 
 func (p *PcClient) GetProcessInfo(name string) (*types.ProcessConfig, error) {
 	return p.getProcessInfo(name)
+}
+
+func (p *PcClient) GetProjectConfig() string {
+	fmt.Printf("GetProjects IN client \n")
+
+	return p.getProjectConfig()
 }
 
 func (p *PcClient) GetProcessPorts(name string) (*types.ProcessPorts, error) {

@@ -1,12 +1,13 @@
 package api
 
 import (
+	"net/http"
+	"net/url"
+
 	_ "github.com/f1bonacc1/process-compose/src/docs"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"net/http"
-	"net/url"
 )
 
 // @title Process Compose API
@@ -51,6 +52,7 @@ func InitRoutes(useLogger bool, handler *PcApi) *gin.Engine {
 	r.POST("/process/restart/:name", handler.RestartProcess)
 	r.POST("/project/stop", handler.ShutDownProject)
 	r.GET("/project/state", handler.GetProjectState)
+	r.GET("/projects", handler.GetProjects)
 	r.PATCH("/process/scale/:name/:scale", handler.ScaleProcess)
 
 	//websocket

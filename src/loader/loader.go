@@ -3,13 +3,14 @@ package loader
 import (
 	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/f1bonacc1/process-compose/src/types"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"gopkg.in/yaml.v2"
-	"os"
-	"path/filepath"
-	"strings"
 )
 
 const (
@@ -24,6 +25,7 @@ func Load(opts *LoaderOptions) (*types.Project, error) {
 
 	for _, file := range opts.FileNames {
 		p := loadProjectFromFile(file, opts.disableDotenv, opts.EnvFileNames)
+		fmt.Printf("OPTS: %+v\n", opts)
 		opts.projects = append(opts.projects, p)
 	}
 	mergedProject, err := merge(opts)
@@ -116,6 +118,7 @@ func loadProjectFromFile(inputFile string, disableDotEnv bool, envFileNames []st
 		log.Fatal().Err(err).Msgf("Failed to validate %s", inputFile)
 	}
 	log.Info().Msgf("Loaded project from %s", inputFile)
+	// fmt.Printf("FINAL PROJECT: %+v\n", project)
 	return project
 }
 

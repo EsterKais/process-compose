@@ -3,9 +3,10 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
+
 	"github.com/f1bonacc1/process-compose/src/types"
 	"github.com/rs/zerolog/log"
-	"net/http"
 )
 
 func (p *PcClient) shutDownProject() error {
@@ -45,4 +46,9 @@ func (p *PcClient) getProjectState(withMemory bool) (*types.ProjectState, error)
 		return nil, err
 	}
 	return &sResp, nil
+}
+
+func (p *PcClient) getProjectConfig() string {
+	fmt.Printf("getProjectConfig IN project \n")
+	return "I AM PROJECT CONFIGURATION"
 }
