@@ -15,88 +15,13 @@ log_configuration:
 
 
 environment:
-  - 'ABC=222'
+  - 'PC_DEBUG=1'
 log_location: ./pc.log
 shell:
   shell_command: "bash"
   shell_argument: "-c"
 
 processes:
-  process0:
-    command: "ls -lFa --color=always"
-    working_dir: "/"
-
-  process1:
-    command: "./test_loop.bash ${PROC4}"
-    availability:
-      restart: "on_failure"
-      backoff_seconds: 2
-    depends_on:
-      _process2:
-        condition: process_completed_successfully
-      process3:
-        condition: process_completed
-      # process4:
-      #   condition: process_completed_successfully
-    environment:
-      - 'EXIT_CODE=0'
-    shutdown:
-      command: "sleep 2 && pkill -f process1"
-      signal: 15
-      timeout_seconds: 4
-
-  _process2:
-    command: "./test_loop.bash process2"
-    log_location: ./pc.proc2.log
-    availability:
-      restart: "on_failure"
-    # depends_on:
-    #   process3:
-    #     condition: process_completed_successfully
-    environment:
-      - 'ABC=2221'
-      - 'PRINT_ERR=111'
-      - 'EXIT_CODE=2'
-    shutdown:
-      command: "sleep 2 && pkill -f 'test_loop.bash process2'"
-      signal: 15
-      timeout_seconds: 4
-    readiness_probe:
-      http_get:
-        host: "google.com"
-        scheme: "https"
-      initial_delay_seconds: 5
-      period_seconds: 5
-      timeout_seconds: 2
-      success_threshold: 1
-      failure_threshold: 3
-
-  process3:
-    command: "./test_loop.bash process3"
-    availability:
-      restart: "always"
-      backoff_seconds: 2
-    depends_on:
-      nginx:
-        condition: process_healthy
-
-  process4:
-    command: "./test_loop.bash process4"
-    disable_ansi_colors: true
-    # availability:
-    #   restart: on_failure
-    environment:
-      - 'ABC=2221'
-      - 'EXIT_CODE=4'
-    readiness_probe:
-      exec:
-        command: "ps -ef | grep -v grep | grep process4"
-      initial_delay_seconds: 5
-      period_seconds: 2
-      timeout_seconds: 1
-      success_threshold: 1
-      failure_threshold: 3
-
   server:
     command: "python3 -m http.server 4040"
     is_tty: true
@@ -105,18 +30,8 @@ processes:
     command: "kcalc"
     disabled: true
 
-  __pc_log:
-    command: "tail -f -n100 process-compose-${USER}.log"
-    working_dir: "/tmp"
-    environment:
-      - 'REDACTED=1'
-    namespace: debug
-
-  __pc_log_client:
-    command: "tail -f -n100 process-compose-${USER}-client.log"
-    working_dir: "/tmp"
-    namespace: debug
-
-
   bat_config:
-    command: "batcat -f process-compose.yaml"
+    command: "cat process-compose.yaml"
+
+  echos:
+    command: "echo something"
