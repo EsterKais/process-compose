@@ -3,6 +3,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/f1bonacc1/process-compose/src/types"
@@ -50,5 +51,8 @@ func (p *PcClient) getProjectState(withMemory bool) (*types.ProjectState, error)
 
 func (p *PcClient) getProjectConfig() string {
 	fmt.Printf("src/client/project.go \n")
-	return "{config: project}"
+	url := fmt.Sprintf("http://%s/project/config", p.address)
+	resp, _ := p.client.Get(url)
+	body, _ := io.ReadAll(resp.Body)
+	return string(body)
 }

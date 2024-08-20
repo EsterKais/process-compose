@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -43,13 +44,13 @@ func (api *PcApi) GetProcess(c *gin.Context) {
 // @Produce  json
 // @Success 200 {object} object "Projects"
 // @Router /projects [get]
-// func (api *PcApi) GetProjectConfig(c *gin.Context) {
-// 	// project := api.project.GetProjectConfig();
+func (api *PcApi) GetProjectConfig(c *gin.Context) {
+	// project := api.project.GetProjectConfig();
 
-// 	// fmt.Printf("API PROJECT: %+v\n", project)
+	fmt.Printf("GetProjectConfig Requested!")
 
-// 	c.JSON(http.StatusOK, "Commented out")
-// }
+	c.JSON(http.StatusOK, "Commented out")
+}
 
 // @Schemes
 // @Description Retrieves the given process and its config
