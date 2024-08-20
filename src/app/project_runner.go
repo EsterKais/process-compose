@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/f1bonacc1/process-compose/src/config"
+	"github.com/f1bonacc1/process-compose/src/loader"
 	"github.com/f1bonacc1/process-compose/src/pclog"
 	"github.com/f1bonacc1/process-compose/src/types"
 
@@ -788,6 +789,16 @@ func (p *ProjectRunner) GetProjectState(checkMem bool) (*types.ProjectState, err
 }
 
 func (p *ProjectRunner) GetProjectConfig() string {
+	current_project := p.project
+	fmt.Printf("current_project: %+v\n", current_project)
+
+	opts := &loader.LoaderOptions{
+		FileNames: []string{},
+	}
+
+	new_project, _ := loader.Load(opts)
+	fmt.Printf("new_project: %+v\n", new_project)
+
 	fmt.Printf("GetProjectConfig IN project_runner \n")
 	return "GetProjectConfig IN project_runner"
 }
