@@ -790,17 +790,28 @@ func (p *ProjectRunner) GetProjectState(checkMem bool) (*types.ProjectState, err
 
 func (p *ProjectRunner) GetProjectConfig() string {
 	current_project := p.project
-	fmt.Printf("current_project: %+v\n", current_project)
+	current_processes := current_project.Processes
+	// fmt.Printf("current_project: %+v\n", current_project)
 
 	opts := &loader.LoaderOptions{
 		FileNames: []string{},
 	}
 
 	new_project, _ := loader.Load(opts)
-	fmt.Printf("new_project: %+v\n", new_project)
+	new_processes := new_project.Processes
 
-	fmt.Printf("GetProjectConfig IN project_runner \n")
-	return "GetProjectConfig IN project_runner"
+	changed_processes := []types.ProcessConfig{}
+
+	for i := range current_processes {
+		if current_processes[i].Command != new_processes[i].Command {
+			fmt.Printf("Process: %s\n has changed", current_processes[i].Name)
+			fmt.Printf("Command has changed: %s -> %s\n", current_processes[i].Command, new_processes[i].Command)
+			changed_processes = append(changed_processes, current_processes[i])
+		}
+	}
+
+	changedProcessesString := fmt.Sprintf("Changed processes: %+v\n", changed_processes)
+	return changedProcessesString
 }
 
 func getMemoryUsage() *types.MemoryState {

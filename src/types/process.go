@@ -2,9 +2,10 @@ package types
 
 import (
 	"fmt"
-	"github.com/f1bonacc1/process-compose/src/health"
 	"math"
 	"time"
+
+	"github.com/f1bonacc1/process-compose/src/health"
 )
 
 const DefaultNamespace = "default"
