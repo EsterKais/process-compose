@@ -49,8 +49,7 @@ func (p *PcClient) getProjectState(withMemory bool) (*types.ProjectState, error)
 	return &sResp, nil
 }
 
-func (p *PcClient) getProjectConfig() string {
-	fmt.Printf("src/client/project.go \n")
+func (p *PcClient) refreshProcesses() string {
 	url := fmt.Sprintf("http://%s/project/config", p.address)
 	resp, _ := p.client.Get(url)
 	body, _ := io.ReadAll(resp.Body)

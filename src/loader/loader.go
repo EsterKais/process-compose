@@ -25,7 +25,6 @@ func Load(opts *LoaderOptions) (*types.Project, error) {
 
 	for _, file := range opts.FileNames {
 		p := loadProjectFromFile(file, opts.disableDotenv, opts.EnvFileNames)
-		fmt.Printf("OPTS: %+v\n", opts)
 		opts.projects = append(opts.projects, p)
 	}
 	mergedProject, err := merge(opts)

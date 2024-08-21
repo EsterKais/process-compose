@@ -788,7 +788,7 @@ func (p *ProjectRunner) GetProjectState(checkMem bool) (*types.ProjectState, err
 	return p.projectState, nil
 }
 
-func (p *ProjectRunner) GetProjectConfig() string {
+func (p *ProjectRunner) RefreshProcesses() string {
 	current_project := p.project
 	current_processes := current_project.Processes
 	// fmt.Printf("current_project: %+v\n", current_project)
@@ -803,15 +803,24 @@ func (p *ProjectRunner) GetProjectConfig() string {
 	changed_processes := []types.ProcessConfig{}
 
 	for i := range current_processes {
-		if current_processes[i].Command != new_processes[i].Command {
-			fmt.Printf("Process: %s\n has changed", current_processes[i].Name)
-			fmt.Printf("Command has changed: %s -> %s\n", current_processes[i].Command, new_processes[i].Command)
+		current_process := current_processes[i]
+		if current_process.Command != new_processes[i].Command {
+			fmt.Printf("Process: %s\n has changed", current_process.Name)
+			fmt.Printf("Command has changed: %s -> %s\n", current_process.Command, new_processes[i].Command)
+
+			p.project.Processes[current_process.Name] = new_processes[i]
+			updated_process := new_processes[i]
+
+			fmt.Printf("Stopping: %s\n", current_process.Name)
+			p.StopProcesses([]string{current_process.Name})
+			fmt.Printf("Running: %s\n", current_process.Name)
+			p.runProcess(&updated_process)
+
 			changed_processes = append(changed_processes, current_processes[i])
 		}
 	}
 
-	changedProcessesString := fmt.Sprintf("Changed processes: %+v\n", changed_processes)
-	return changedProcessesString
+	return "Done!"
 }
 
 func getMemoryUsage() *types.MemoryState {

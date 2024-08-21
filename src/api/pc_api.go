@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -44,9 +43,8 @@ func (api *PcApi) GetProcess(c *gin.Context) {
 // @Produce  json
 // @Success 200 {object} object "Projects"
 // @Router /projects [get]
-func (api *PcApi) GetProjectConfig(c *gin.Context) {
-	fmt.Printf("src/api/pc_api.go")
-	project := api.project.GetProjectConfig();
+func (api *PcApi) RefreshProcesses(c *gin.Context) {
+	project := api.project.RefreshProcesses();
 	c.JSON(http.StatusOK, project)
 }
 

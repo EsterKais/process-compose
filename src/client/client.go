@@ -97,10 +97,8 @@ func (p *PcClient) GetProcessInfo(name string) (*types.ProcessConfig, error) {
 	return p.getProcessInfo(name)
 }
 
-func (p *PcClient) GetProjectConfig() string {
-	fmt.Printf("src/client/client.go \n")
-
-	return p.getProjectConfig()
+func (p *PcClient) RefreshProcesses() string {
+	return p.refreshProcesses()
 }
 
 func (p *PcClient) GetProcessPorts(name string) (*types.ProcessPorts, error) {
