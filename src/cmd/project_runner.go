@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -42,7 +41,6 @@ func getProjectRunner(process []string, noDeps bool, mainProcess string, mainPro
 		log.Fatal().Err(err).Msg("Failed to initialize the project")
 	}
 
-	fmt.Printf("RUNNER: %+v\n", runner)
 	return runner
 }
 

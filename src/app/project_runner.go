@@ -275,7 +275,6 @@ func (p *ProjectRunner) StartProcess(name string) error {
 		log.Error().Msgf("Process %s is already running", name)
 		return fmt.Errorf("process %s is already running", name)
 	}
-	fmt.Printf("Client: %+v\n", p.project.Processes)
 	if processConfig, ok := p.project.Processes[name]; ok {
 		p.runProcess(&processConfig)
 	} else {
@@ -347,7 +346,6 @@ func (p *ProjectRunner) RestartProcess(name string) error {
 func (p *ProjectRunner) GetProcessInfo(name string) (*types.ProcessConfig, error) {
 	p.runProcMutex.Lock()
 	defer p.runProcMutex.Unlock()
-	fmt.Printf("Client: %+v\n", p.project.Processes)
 	if processConfig, ok := p.project.Processes[name]; ok {
 		return &processConfig, nil
 	} else {
@@ -800,28 +798,86 @@ func (p *ProjectRunner) RefreshProcesses() string {
 	new_project, _ := loader.Load(opts)
 	new_processes := new_project.Processes
 
-	changed_processes := []types.ProcessConfig{}
+	// Added/removed/renamed/processes:
+	current_process_names := getProcessNames(current_processes)
+	new_process_names := getProcessNames(new_processes)
 
+	rogue_process_names := getNonMatchingElements(current_process_names, new_process_names)
+	fmt.Printf("rogue_process_names: %+v\n", rogue_process_names)
+
+	// Create a map to store the elements of the current array for quick lookup
+	currentMap := make(map[string]bool)
+	for _, element := range current_process_names {
+		currentMap[element] = true
+	}
+
+	for _, element := range rogue_process_names {
+		if currentMap[element] {
+			fmt.Printf("Removing %s\n", element)
+			p.removeProcess(element)
+		} else {
+			fmt.Printf("Adding %s\n", element)
+			p.addProcessAndRun(new_project.Processes[element])
+		}
+	}
+
+
+	// Changed processes:
 	for i := range current_processes {
 		current_process := current_processes[i]
 		if current_process.Command != new_processes[i].Command {
-			fmt.Printf("Process: %s\n has changed", current_process.Name)
-			fmt.Printf("Command has changed: %s -> %s\n", current_process.Command, new_processes[i].Command)
+			fmt.Printf("'%s' Command has changed: %s -> %s\n", current_process.Name, current_process.Command, new_processes[i].Command)
 
+			// Update the config of the process:
 			p.project.Processes[current_process.Name] = new_processes[i]
-			updated_process := new_processes[i]
 
-			fmt.Printf("Stopping: %s\n", current_process.Name)
-			p.StopProcesses([]string{current_process.Name})
-			fmt.Printf("Running: %s\n", current_process.Name)
-			p.runProcess(&updated_process)
-
-			changed_processes = append(changed_processes, current_processes[i])
+			fmt.Printf("Restarting: %s\n", current_process.Name)
+			p.RestartProcess(current_process.Name)
 		}
 	}
 
 	return "Done!"
 }
+
+func getProcessNames(processes types.Processes) []string {
+	var names []string
+	for _, process := range processes {
+		names = append(names, process.Name)
+	}
+	return names
+}
+
+func getNonMatchingElements(currentArray, newArray []string) []string {
+	// Create maps to store the elements of both arrays for quick lookup
+	currentMap := make(map[string]bool)
+	newMap := make(map[string]bool)
+
+	for _, element := range currentArray {
+		currentMap[element] = true
+	}
+
+	for _, element := range newArray {
+		newMap[element] = true
+	}
+
+	// Find elements that are in newArray but not in currentArray (added)
+	var nonMatchingElements []string
+	for _, element := range newArray {
+		if !currentMap[element] {
+			nonMatchingElements = append(nonMatchingElements, element)
+		}
+	}
+
+	// Find elements that are in currentArray but not in newArray (removed)
+	for _, element := range currentArray {
+		if !newMap[element] {
+			nonMatchingElements = append(nonMatchingElements, element)
+		}
+	}
+
+	return nonMatchingElements
+}
+
 
 func getMemoryUsage() *types.MemoryState {
 	var m runtime.MemStats
